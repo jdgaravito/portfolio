@@ -10,6 +10,7 @@ app.include_router(blog_post.router)
 
 @app.get("/")
 def home_message():
-    return {"message": "Hi, Welcome to my portfolio"}
+    return {"message": "Hi, Welcome to my portfolio website"}
 
 
+   
