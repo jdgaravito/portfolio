@@ -1,0 +1,25 @@
+FROM node:lts-slim as build
+
+# Set the Node environment to development to ensure all packages are installed
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+FROM node:lts-slim as run
+
+ENV NODE_ENV production
+WORKDIR /app
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/build ./build
+RUN npm install --production
+
+# Expose port 8080 for production for the app made in build
+EXPOSE 8080
+ENTRYPOINT [ "npm", "run", "start" ]
+

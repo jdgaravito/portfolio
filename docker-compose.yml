@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  backend:
+    container_name: backend-portfolio
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      args:
+        USER_ID: $USER_ID
+        GROUP_ID: $GROUP_ID
+    env_file:
+      - bkservices.env
+    command: uvicorn app.main:app --workers 1 --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - 8004:8000
+    depends_on:
+      - db
+
+  db:
+    container_name: db-portafolio
+    image: postgres:latest
+    ports:
+      - "8006:5432"
+    expose:
+      - 5432
+    env_file:
+      - bkservices.env
+
+  frontend:
+    container_name: frontend-portfolio
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    volumes:
+     - ./frontend:/usr/src/app
+    ports:
+      - "3000:3000"
+    expose: 
+      - 3000
+    env_file:
+      - ftservices.env
