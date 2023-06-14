@@ -17,3 +17,4 @@ class BlogModel(BaseModel):
 def create_blog(blog: BlogModel):
     return "Ok"
 
+

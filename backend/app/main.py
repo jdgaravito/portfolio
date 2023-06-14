@@ -1,4 +1,4 @@
-
+"""Main module"""""
 from fastapi import FastAPI
 from .router import blog_get, blog_post
 
@@ -10,7 +10,5 @@ app.include_router(blog_post.router)
 
 @app.get("/")
 def home_message():
+    """Home page message"""
     return {"message": "Hi, Welcome to my portfolio website"}
-
-
-   
