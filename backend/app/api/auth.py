@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -10,9 +11,8 @@ from ..models.users import User
 from passlib.context import CryptContext
 from ..db import get_db
 
-
-SECRET_KEY = "TW^4k?Wg6lVN./BDT-"
-ALGORITHM = "HS256"
+ALGORITHM = os.environ.get("ALGORITHM")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 class CreateUser(BaseModel):
@@ -86,7 +86,7 @@ async def create_new_user(create_user: CreateUser, db: Session = Depends(get_db)
 
     db.add(create_user_model)
     db.commit()
-    return {"user created:" :create_user_model.username}
+    return {"user created:":create_user_model.username}
 
 
 @auth_router.post("/token")
