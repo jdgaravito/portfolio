@@ -31,7 +31,7 @@ def get_db():
     it will be closed after the request is completed.
     '''
     try:
-        db = SessionLocal()
-        yield db
+        data_base = SessionLocal()
+        yield data_base
     finally:
-        db.close()
+        data_base.close()

@@ -16,6 +16,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 class CreateUser(BaseModel):
+    '''Create user model'''
     username: str
     email: Optional[str]
     first_name: str
@@ -30,14 +31,17 @@ Oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_password_hash(password):
+    '''Hash password'''
     return bcrypt_context.hash(password)
 
 
 def verify_password(plain_password, hashed_password):
+    '''Verify password'''
     return bcrypt_context.verify(plain_password, hashed_password)
 
 
 def authenticate_user(username: str, password: str, db):
+    '''Authenticate user'''
     user = db.query(User).filter(User.username == username).first()
 
     if not user:
@@ -50,6 +54,7 @@ def authenticate_user(username: str, password: str, db):
 def create_access_token(
     username: str, user_id: int, expires_delta: Optional[timedelta] = None
 ):
+    '''Create access token'''
     encode = {"sub": username, "id": user_id}
 
     if expires_delta:
@@ -61,6 +66,7 @@ def create_access_token(
 
 
 async def get_current_user(token: str = Depends(Oauth2_bearer)):
+    '''Get current user'''
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -73,7 +79,9 @@ async def get_current_user(token: str = Depends(Oauth2_bearer)):
 
 
 @auth_router.post("/create/user")
-async def create_new_user(create_user: CreateUser, db: Session = Depends(get_db)):
+async def create_new_user(create_user: CreateUser,
+                          db: Session = Depends(get_db)):
+    '''Create new user'''
     create_user_model = User()
     create_user_model.email = create_user.email
     create_user_model.username = create_user.username
@@ -86,18 +94,23 @@ async def create_new_user(create_user: CreateUser, db: Session = Depends(get_db)
 
     db.add(create_user_model)
     db.commit()
-    return {"user created:":create_user_model.username}
+    return {"user created:": create_user_model.username}
 
 
 @auth_router.post("/token")
 async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
 ):
+    '''Login for access token'''
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise token_exception()
     token_expires = timedelta(minutes=20)
-    token = create_access_token(user.username, user.id, expires_delta=token_expires)
+    token = create_access_token(
+        user.username,
+        user.id,
+        expires_delta=token_expires)
     return {"token": token}
 
 
@@ -105,6 +118,7 @@ async def login_for_access_token(
 
 
 def get_user_exception():
+    '''Get user exception'''
     creadentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -114,6 +128,7 @@ def get_user_exception():
 
 
 def token_exception():
+    '''Token exception'''
     token_exception_response = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Incorrect username or password",
