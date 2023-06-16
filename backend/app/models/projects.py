@@ -1,12 +1,14 @@
 import enum
-from typing import Text
-from sqlalchemy import Column, Boolean, Integer, Enum, String , DateTime, Float, Text, ForeignKey
+from sqlalchemy import Column, Boolean, Integer, Enum, String
+from sqlalchemy import DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .users import User
 from ..db import Base
 
+
 class ProjectCategory(enum.Enum):
+    '''Project category enum'''
     UX_UI = "UX_UI"
     DEV = "DEV"
     PRODUCT = "PRODUCT"
@@ -15,6 +17,7 @@ class ProjectCategory(enum.Enum):
 
 
 class Project(Base):
+    '''Project model'''
     __tablename__ = "projects"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String)
