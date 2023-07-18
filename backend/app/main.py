@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .api.auth import auth_router
 from .api.portfolio_api import portfolio_router
 from .api.ping import ping_router
-from .db import init_db
+# from .db import init_db
 
 app = FastAPI()
 
