@@ -1,3 +1,4 @@
+'''Project schema'''
 from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel, Field
@@ -24,6 +25,7 @@ class ProjectBase(BaseModel):
     category: Category = Category.UX_UI
 
     class Config:
+        '''Project schema config'''
         schema_extra = {
             "example": {
                 "id": "1",

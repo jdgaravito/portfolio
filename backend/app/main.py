@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .api.auth import auth_router
 from .api.portfolio_api import portfolio_router
 from .api.ping import ping_router
-
+from .db import init_db
 
 app = FastAPI()
 
@@ -27,6 +27,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+async def startup_event():
+    '''This function will be called when the application starts up. We will
+    use this function to initialize the database connection.'''
+    # init_db()
 
 
 @app.get("/")
