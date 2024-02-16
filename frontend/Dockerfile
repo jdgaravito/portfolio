@@ -29,8 +29,7 @@ RUN npm install
 COPY . .
 
 # Expose port 3000 for the SvelteKit app
-
-EXPOSE 3000
+EXPOSE 5173 3000
 
 # Run `npm run dev` and set the host to 0.0.0.0 so we can access the web app from outside
 

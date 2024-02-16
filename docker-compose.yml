@@ -37,10 +37,13 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     volumes:
-     - ./frontend:/usr/src/app
+      - ./frontend:/usr/src/app
     ports:
+      - "5173:5173"
       - "3000:3000"
-    expose: 
+
+    expose:
+      - 5173 
       - 3000
     env_file:
       - ftservices.env
