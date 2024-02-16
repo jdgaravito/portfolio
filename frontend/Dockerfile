@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM oven/bun:slim
 
 # Set the Node environment to development to ensure all packages are installed
 ENV NODE_ENV development
@@ -20,18 +20,21 @@ WORKDIR /usr/src/app
 
 # Copy over `package.json` and lock files to optimize the build process
 COPY package*.json ./
+# # run bun installer
+# RUN curl -fsSL https://bun.sh/install | bash
+
 
 # Install Node modules
-RUN npm install -g npm@latest
-RUN npm install  
+RUN bun install  
 
 # Copy over rest of the project files
 COPY . .
 
-# Expose port 3000 for the SvelteKit app
+# Expose port 3000 and 5173 for the SvelteKit app
 
+EXPOSE 5173
 EXPOSE 3000
 
 # Run `npm run dev` and set the host to 0.0.0.0 so we can access the web app from outside
 
-CMD [ "npm" , "run" ,  "dev"]
+CMD [ "bun" , "run" ,  "dev", "--host"]
