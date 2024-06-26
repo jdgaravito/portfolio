@@ -1,14 +1,13 @@
 import os
 from datetime import datetime, timedelta
-
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
-from typing import Optional
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
-from ..models.users import User
 from passlib.context import CryptContext
+from ..models.users import User
 from ..db import get_db
 
 ALGORITHM = os.environ.get("ALGORITHM")
